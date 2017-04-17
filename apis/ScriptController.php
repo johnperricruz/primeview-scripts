@@ -29,6 +29,7 @@
 							<tr>
 								<td>Google Analytics (UA Code)</td>
 								<td><input style="width:100%;" placeholder="UA-********-*" type="text" name="ga_ua" value="'. esc_attr( get_option('ga_ua') ).'" /></td>
+								<td><textarea type="text" name="third_party_scripts" value="'. esc_attr( get_option('third_party_scripts') ).'" >'.get_option('third_party_scripts').'</textarea></td>
 							</tr>
 						</table>
 						</table>
@@ -41,22 +42,33 @@
 	}
 	function pv_scripts_save_settings_post(){
 		register_setting( 'pv-scripts-option-group', 'ga_ua' );
+		register_setting( 'pv-scripts-option-group', 'third_party_scripts' );
 	}	
 	function optimizeGa(){
-		if(get_option('ga_ua')!=null && !is_admin()){
-			echo "<!-- Optimized GA Code -->";
+		if(!is_admin()){
+			echo "<!-- Optimized Tracking Codes -->";
 			if (!isset($_SERVER['HTTP_USER_AGENT']) || stripos($_SERVER['HTTP_USER_AGENT'], 'Speed Insights') === false){
-			?>
-				<script type="text/javascript" data-cfasync="false">
-					(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-					(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-					m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-					})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-					ga('create', '<?php echo get_option('ga_ua');?>', 'auto');		 
-					ga('send', 'pageview');
-				</script> 
-			<?php
-			}	
+				//GA
+				if(get_option('ga_ua')!=null ){
+					?>
+						<script type="text/javascript" data-cfasync="false">
+							(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+							(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+							m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+							})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+							ga('create', '<?php echo get_option('ga_ua');?>', 'auto');		 
+							ga('send', 'pageview');
+						</script> 
+					<?php
+				}	
+				//END GA  
+				
+				//THIRDPARTY SCRIPTS
+				if(get_option('third_party_scripts')!=null ){
+					echo get_option('third_party_scripts');
+				}
+				//THIRDPARTY SCRIPTS
+			}
 			echo "<!-- End Optimized Tracker Code -->";
 		}
 	} 
