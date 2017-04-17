@@ -43,7 +43,7 @@
 		register_setting( 'pv-scripts-option-group', 'ga_ua' );
 	}	
 	function optimizeGa(){
-		if(get_option('ga_ua')!=null){
+		if(get_option('ga_ua')!=null && !is_admin()){
 			echo "<!-- Optimized GA Code -->";
 			if (!isset($_SERVER['HTTP_USER_AGENT']) || stripos($_SERVER['HTTP_USER_AGENT'], 'Speed Insights') === false){
 			?>
@@ -59,6 +59,6 @@
 			}	
 			echo "<!-- End Optimized Tracker Code -->";
 		}
-	}
+	} 
 }
 ?>
